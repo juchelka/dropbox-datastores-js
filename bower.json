@@ -1,0 +1,8 @@
+{
+  "name": "dropbox-datastores-js",
+  "version": "1.0.0",
+  "main": "lib/dropbox-datastores-1.0.0.js",
+  "ignore": [
+    "examples"
+  ]
+}
