@@ -3,7 +3,7 @@
 	<head>
 		<title>My Tasks</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-		<script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js"></script>
+		<script src="https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js"></script>
 		<script src="tutorial.js"></script>
 		<link rel="stylesheet" href="style.css">
 	</head>
@@ -21,6 +21,8 @@
 					<input id="newTask" type="text" placeholder="Enter a new task..." />
 					<button id="addButton" type="submit">Add Task</button>
 				</form>
+				<p id="status">Connecting...</p>
+				<p id="mtime"></p>
 			</div>
 
 			<div id="login">

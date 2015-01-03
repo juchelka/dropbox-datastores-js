@@ -3,6 +3,7 @@ var DROPBOX_APP_KEY = 'xoit9j3uwj9vmdv';
 
 // Exposed for easy access in the browser console.
 var client = new Dropbox.Client({key: DROPBOX_APP_KEY});
+var defaultDatastore;
 var taskTable;
 
 $(function () {
@@ -18,6 +19,10 @@ $(function () {
 	// updateList will be called every time the table changes.
 	function updateList() {
 		$('#tasks').empty();
+		$('#mtime').empty();
+		var mtime = defaultDatastore.getModifiedTime();
+		if (mtime)
+			$('#mtime').text('Last modified time: ' + mtime);
 
 		var records = taskTable.query();
 
@@ -63,8 +68,25 @@ $(function () {
 		client.getDatastoreManager().openDefaultDatastore(function (error, datastore) {
 			if (error) {
 				alert('Error opening default datastore: ' + error);
+				return;
 			}
 
+			$(window).bind('beforeunload', function () {
+				if (datastore.getSyncStatus().uploading) {
+					return "You have pending changes that haven't been synchronized to the server.";
+				}
+			});
+			$('#status').text('Synchronized');
+			var previouslyUploading = false;
+			datastore.syncStatusChanged.addListener(function () {
+				var uploading = datastore.getSyncStatus().uploading;
+				if (previouslyUploading && !uploading) {
+					$('#status').text('Last sync: ' + new Date());
+				}
+				previouslyUploading = uploading;
+			});
+
+			defaultDatastore = datastore;
 			taskTable = datastore.getTable('tasks');
 
 			// Populate the initial task list.
